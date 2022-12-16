@@ -1,0 +1,25 @@
+{
+    "name": "velocityweb",
+    "version": "1.0.0",
+    "description": "Velocity, in your web browser.",
+    "main": "packages/out/index.js",
+    "scripts": {
+        "build": "rollup -c",
+        "dev": "rollup -c -w",
+        "package": "node ./scripts/build all",
+        "package:watch": "node ./scripts/build all -w"
+    },
+    "type": "module",
+    "author": "TheCommieAxolotl",
+    "license": "MIT",
+    "devDependencies": {
+        "@rollup/plugin-node-resolve": "^15.0.1",
+        "@rollup/plugin-sucrase": "^5.0.1",
+        "@rollup/plugin-terser": "^0.1.0",
+        "chalk": "^5.1.2",
+        "inquirer": "^9.1.4",
+        "rollup": "^3.5.1",
+        "sucrase": "^3.29.0"
+    },
+    "dependencies": {}
+}
