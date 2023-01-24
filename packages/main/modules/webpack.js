@@ -171,6 +171,16 @@ globalPromise.then(async () => {
         }
     });
 
+    const _FormModules = await waitFor((m) => {
+        if (m.default) return false;
+
+        for (const k of Object.keys(m)) {
+            if (!m[k]) continue;
+            if (typeof m[k].toString !== "function") continue;
+            if (m[k].toString().includes("().divider") && m[k].toString().includes("className")) return true;
+        }
+    });
+
     const _ColorPickerModules = await waitFor((m) => m.default?.toString().includes("customColor"));
 
     const ContextMenuActions = {};
@@ -210,13 +220,14 @@ globalPromise.then(async () => {
             InviteStore: (await waitFor(["getInvites"])).default,
         },
         Components: {
+            _FormModules,
             FormText: await waitFor((m) => m.default?.Sizes?.SIZE_32 && m.default?.Colors),
-            FormDivider: await waitFor((m) => m.default?.toString().includes("().divider") && m.default?.toString().includes("style")),
-            SwitchItem: await waitFor((m) => m.default?.toString().includes("helpdeskArticleId")),
+            FormDivider: Object.values(_FormModules).find((k) => k?.toString().includes("divider")),
+            TextInput: Object.values(_FormModules).find((k) => k?.Sizes?.MINI && k?.defaultProps),
+            Slider: Object.values(_FormModules).find((k) => k?.getDerivedStateFromProps && k?.defaultProps?.keyboardStep),
+            SwitchItem: Object.values(_FormModules).find((k) => k?.toString?.().includes("e.note") && k?.toString?.().includes("focusTarget")),
             Popout: await waitFor((m) => m.default?.prototype?.render?.toString().includes("shouldShowPopout")),
             ConfirmModal: await waitFor((m) => m.default?.toString().includes("confirmText")),
-            TextInput: await waitFor((m) => m.default?.prototype?.render?.toString().includes("inputClassName") && m.default?.prototype?.render?.toString().includes("inputPrefix")),
-            TextForm: await waitFor((m) => m.default?.prototype?.render?.toString().includes("minLength")),
             TooltipContainer: await waitFor((m) => m.default?.toString().includes("shouldShowTooltip") && m.default?.Positions),
             ButtonModules: {
                 _ButtonModules,
@@ -229,16 +240,13 @@ globalPromise.then(async () => {
                 _ColorPickerModules,
                 default: _ColorPickerModules.default,
                 CustomColorPicker: Object.values(_ColorPickerModules).find((m) => typeof m === "object"),
-                CustomColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("customColor")),
+                CustomColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("customColor") && m.prototype?.render?.toString().includes("isCustom")),
                 DefaultColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("isDefault")),
             },
-            Slider: await waitFor(Filters.byPrototypeFields(["renderMark"])),
             PanelButton: await waitFor((m) => m.default?.toString().includes("onContextMenu") && m.default?.toString().includes("tooltipText")),
-            Switch: await waitFor((m) => m.default?.toString().includes("PRIMARY_DARK_400") && m.default?.toString().includes("STATUS_GREEN_600") && m.default?.toString().includes("checkbox")),
-            Anchor: await waitFor((m) => m.default?.contextType && m.default?.defaultProps && m.default?.prototype?.renderNonInteractive),
+            Anchor: await waitFor((m) => m.P3?.contextType && m.P3?.defaultProps && m.P3?.prototype?.renderNonInteractive),
             Markdown: await waitFor((m) => m.default?.rules && m.default?.defaultProps?.parser),
             Text: await waitFor((m) => m.default?.Sizes?.SIZE_10),
-            VarientText: await waitFor((m) => m.x?.name === "p"),
             ModalElements: {
                 _ModalElements,
                 ModalHeader: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("header")),
@@ -248,18 +256,10 @@ globalPromise.then(async () => {
                 CloseButton: Object.values(_ModalElements).find((m) => m.toString().includes("BLANK") && m.toString().includes("withCircleBackground")),
             },
             EmptyState: await waitFor(
-                (m) =>
-                    m.default?.toString().includes("onCTAClick") &&
-                    m.default?.toString().includes("description") &&
-                    m.default?.toString().includes("artURL") &&
-                    !m.default?.toString().includes("stream")
+                (m) => m.default?.toString().includes("onCTAClick") && m.default?.toString().includes("description") && m.default?.toString().includes("artURL") && !m.default?.toString().includes("stream")
             ),
             Alert: await waitFor(
-                (m) =>
-                    m.default?.toString().includes("title") &&
-                    m.default?.toString().includes("body") &&
-                    m.default?.toString().includes("secondaryConfirmText") &&
-                    !m.default?.toString().includes("DONT_ASK_AGAIN")
+                (m) => m.default?.toString().includes("title") && m.default?.toString().includes("body") && m.default?.toString().includes("secondaryConfirmText") && !m.default?.toString().includes("DONT_ASK_AGAIN")
             ),
         },
         Constants: {},
@@ -272,9 +272,7 @@ globalPromise.then(async () => {
             Trash: await waitFor((m) => m.default?.toString().includes("M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z")),
             Rocket: await waitFor((m) => m.default?.toString().includes("M4.92871 13.4149L10.5857 19.0709L18.363")),
             Link: await waitFor((m) => m.default?.toString().includes("M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.0")),
-            PersonAdd: await waitFor((m) =>
-                m.default?.toString().includes("M6.5 8.00667C7.88 8.00667 9 6.88667 9 5.50667C9 4.12667 7.88 3.00667 6.5 3.00667C5.12 3.00667 4 4.12667 4 5.50667C4 6.88667 5.12 8.00667")
-            ),
+            PersonAdd: await waitFor((m) => m.default?.toString().includes("M6.5 8.00667C7.88 8.00667 9 6.88667 9 5.50667C9 4.12667 7.88 3.00667 6.5 3.00667C5.12 3.00667 4 4.12667 4 5.50667C4 6.88667 5.12 8.00667")),
             Upload: await waitFor((m) => m.default?.toString().includes("M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v")),
             Search: await waitFor((m) => m.default?.toString().includes("M21.707 20.293L16.314 14.9C17.403 13.504 18 11.79")),
             Folder: await waitFor((m) => m.default?.toString().includes("M20 7H12L10.553 5.106C10.214 4.428 9")),
@@ -283,7 +281,7 @@ globalPromise.then(async () => {
         },
         Classes: {
             Anchor: await waitFor(["anchorUnderlineOnHover"]),
-            ContextMenu: await waitFor(["menu", "flexible"]),
+            ContextMenu: await waitFor(["menu", "iconContainer"]),
             Titles: await waitFor(["h1", "h2"]),
             RadioItems: await waitFor(["item", "collapsibleItem"]),
             Position: await waitFor(["directionRow"]),
