@@ -8,6 +8,7 @@ import Slider from "../../../ui/components/settings/Slider";
 import TextInput from "../../../ui/components/settings/TextInput";
 import ColorPicker from "../../../ui/components/settings/ColorPicker";
 import FormTitle from "../reworks/FormTitle";
+import SwitchEle from "../reworks/Switch";
 
 const { WebpackModules, AddonManager } = Velocity;
 
@@ -80,7 +81,6 @@ injectComponentStyle("addon-card", {
 export default (props) => {
     const { Components, Icons } = WebpackModules.common;
 
-    const SwitchEle = Components.Switch.default;
     const Markdown = Components.Markdown.default;
     const PanelButton = Components.PanelButton.default;
 
